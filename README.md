@@ -1,114 +1,114 @@
-# PSD 图层展示视频生成器
+# PSD Layer Reveal Video Generator
 
-把一张 Photoshop（PSD）分层作品，逐层从底到顶依次展示，渲染成一段带淡入淡出、图层名标注、歌词字幕与背景音乐的视频。
+Turns a layered Photoshop (PSD) artwork into a video that reveals layers one by one from bottom to top, with cross-fades, layer-name captions, lyric subtitles, and background music.
 
-## 功能特性
+## Features
 
-- **逐层展示**：按图层从底到顶的堆叠顺序，每一步多显示一层，直到完整作品呈现。
-- **正确合成**：使用 `psd-tools` 的合成引擎渲染，完整保留混合模式、剪贴蒙版、调整图层效果。
-- **图层名标注**：字号、颜色、位置、对齐方式自动取自 PSD 中的示例文字层，无需改代码。
-- **淡入淡出**：层与层之间平滑过渡，结尾图层名可淡出、成图可定格。
-- **歌词字幕**：支持 LRC 风格歌词文件（原文 + 翻译），样式同样自动取自 PSD 中的歌词文字层。
-- **语音识别歌词**：本地 `faster-whisper` 离线识别（99 种语言）或百度短语音在线识别，并自动翻译。
-- **背景音乐**：通过 ffmpeg 混入 mp3/mp4 音频，支持音量调节、淡入淡出、循环/裁剪对齐。
-- **图形界面**：深色主题 GUI，含歌词预览与编辑、进度条与日志。
+- **Layer-by-layer reveal**: Walks the layer stack from bottom to top, revealing one more layer at each step until the complete artwork is shown.
+- **Faithful compositing**: Renders with the `psd-tools` compositing engine, preserving blend modes, clipping masks, and adjustment-layer effects.
+- **Layer-name captions**: Font size, color, position, and alignment are read automatically from a sample text layer in the PSD — no code changes needed.
+- **Cross-fades**: Smooth transitions between layers; the final caption can fade out and the finished artwork can hold on screen.
+- **Lyric subtitles**: Supports LRC-style lyric files (original + translation); styling is likewise taken from lyric text layers in the PSD.
+- **Speech-to-lyrics**: Offline recognition via a local `faster-whisper` model (99 languages), or online Baidu short-speech recognition — both with automatic translation.
+- **Background music**: Muxes mp3/mp4 audio through ffmpeg, with volume control, fade in/out, and loop/trim to match the video length.
+- **GUI**: Dark-themed interface with lyric preview and editing, a progress bar, and a log pane.
 
-## 目录结构
+## Project Structure
 
 ```
 g:\script
 ├── README.md
-├── .gitignore                     # 忽略密钥 / 缓存 / 模型权重等
-├── download_model.py              # 下载本地 Whisper 模型权重
+├── .gitignore                     # Ignores keys / caches / model weights
+├── download_model.py              # Downloads the local Whisper model weights
 ├── Models
-│   └── faster-whisper-small        # 本地 Whisper 模型（离线语音识别）
-│       ├── model.bin               # 由 download_model.py 下载，体积大不入库
+│   └── faster-whisper-small        # Local Whisper model (offline speech recognition)
+│       ├── model.bin               # Downloaded by download_model.py; too large to track
 │       ├── config.json
 │       ├── tokenizer.json
 │       └── vocabulary.txt
 └── mp4
-    ├── renderer.py                # 核心渲染与歌词识别逻辑
-    ├── gui.py                     # 图形界面
-    ├── main.pyw                   # 双击无终端启动 GUI（pythonw）
-    ├── baidu_keys.json            # 百度识别/翻译 Key（由 GUI 保存，不入库）
-    └── ...                        # 示例 PSD / mp3 / lrc 文件（大素材不入库）
+    ├── renderer.py                # Core rendering and lyric recognition logic
+    ├── gui.py                     # Graphical interface
+    ├── main.pyw                   # Double-click to launch the GUI without a console (pythonw)
+    ├── baidu_keys.json            # Baidu recognition/translation keys (saved by the GUI, not tracked)
+    └── ...                        # Sample PSD / mp3 / lrc files (large assets, not tracked)
 ```
 
-## 环境依赖
+## Requirements
 
-需要 Python 3.8+，并安装以下包：
+Requires Python 3.8+ and the following packages:
 
 ```bash
 pip install opencv-python numpy Pillow psd-tools requests faster-whisper imageio-ffmpeg
 ```
 
-> `tkinter` 为 Python 自带；`imageio-ffmpeg` 用于混入背景音乐，`faster-whisper` 用于本地语音识别（可选用百度在线识别替代）。
+> `tkinter` ships with Python. `imageio-ffmpeg` provides the ffmpeg executable used for muxing background music, and `faster-whisper` powers local speech recognition (Baidu online recognition can be used instead).
 
-## 快速开始
+## Quick Start
 
-### 方式一：图形界面（推荐）
+### Option 1: GUI (recommended)
 
-双击 [main.pyw](file:///g:/script/mp4/main.pyw)，或运行：
+Double-click [main.pyw](file:///g:/script/mp4/main.pyw), or run:
 
 ```bash
 python mp4/gui.py
 ```
 
-1. 选择 PSD 文件，输出视频名会自动生成。
-2. 按需设置帧率、每层停留时长、淡入淡出、视频最长边等参数。
-3. 可选：选择背景音乐、歌词文件，或点击「语音识别歌词」自动生成歌词。
-4. 点击「开始渲染」，等待完成。
+1. Choose a PSD file — the output video name is filled in automatically.
+2. Adjust the frame rate, per-layer hold time, fade duration, maximum video side, and other options as needed.
+3. Optional: pick background music and a lyric file, or click "语音识别歌词" (Recognize lyrics) to generate the lyrics automatically.
+4. Click "开始渲染" (Start rendering) and wait for it to finish.
 
-### 方式二：命令行
+### Option 2: Command line
 
-直接编辑 [renderer.py](file:///g:/script/mp4/renderer.py) 顶部的配置参数（`PSD_PATH`、`OUTPUT_VIDEO` 等），然后运行：
+Edit the configuration constants at the top of [renderer.py](file:///g:/script/mp4/renderer.py) (`PSD_PATH`, `OUTPUT_VIDEO`, etc.), then run:
 
 ```bash
 python mp4/renderer.py
 ```
 
-## 配置说明
+## Configuration
 
-核心参数位于 [renderer.py](file:///g:/script/mp4/renderer.py) 顶部的「配置参数」区块：
+The main parameters live in the configuration block at the top of [renderer.py](file:///g:/script/mp4/renderer.py):
 
-| 参数 | 说明 |
+| Parameter | Description |
 | --- | --- |
-| `PSD_PATH` / `OUTPUT_VIDEO` | 输入 PSD 与输出视频路径 |
-| `FPS` | 视频帧率 |
-| `HOLD_FRAMES` | 每层出现后停留帧数 |
-| `FADE_FRAMES` | 层间淡入淡出帧数 |
-| `TEXT_FADE_FRAMES` | 结尾图层名淡出帧数 |
-| `ENDING_HOLD_FRAMES` | 结尾成图定格帧数 |
-| `BG_COLOR` | 透明区域底色（默认白色） |
-| `MAX_SIDE` | 视频最长边像素（默认 2160，`None` 保留原尺寸） |
-| `SHOW_LAYER_NAME` | 是否显示当前图层名 |
-| `FONT_PATH` | 图层名/歌词字体文件 |
-| `LYRICS_FILE` | 歌词文件路径，`None` 不显示 |
-| `BG_MUSIC_PATH` / `BG_MUSIC_VOLUME` | 背景音乐与音量（0~1） |
-| `AUTO_LYRICS_ENGINE` | `whisper`（本地）或 `baidu`（在线） |
-| `WHISPER_MODEL` / `WHISPER_MODEL_PATH` | 本地模型尺寸 / 模型目录 |
+| `PSD_PATH` / `OUTPUT_VIDEO` | Input PSD path and output video path |
+| `FPS` | Video frame rate |
+| `HOLD_FRAMES` | Frames each layer stays on screen |
+| `FADE_FRAMES` | Frames used for the cross-fade between layers |
+| `TEXT_FADE_FRAMES` | Frames used to fade out the layer-name caption at the end |
+| `ENDING_HOLD_FRAMES` | Frames the finished artwork holds at the end |
+| `BG_COLOR` | Background color for transparent areas (white by default) |
+| `MAX_SIDE` | Longest side of the video in pixels (default 2160; `None` keeps the original size) |
+| `SHOW_LAYER_NAME` | Whether to show the current layer name |
+| `FONT_PATH` | Font file used for layer names and lyrics |
+| `LYRICS_FILE` | Path to the lyric file; `None` disables lyrics |
+| `BG_MUSIC_PATH` / `BG_MUSIC_VOLUME` | Background music path and volume (0–1) |
+| `AUTO_LYRICS_ENGINE` | `whisper` (local) or `baidu` (online) |
+| `WHISPER_MODEL` / `WHISPER_MODEL_PATH` | Local model size / model directory |
 
-## 歌词
+## Lyrics
 
-### LRC 歌词文件格式
+### LRC lyric file format
 
-每行 `[mm:ss.xx] 原文 | 翻译`，无 `|` 则不显示翻译：
+Each line follows `[mm:ss.xx] original | translation`; a line without `|` shows no translation:
 
 ```
 [00:00.00] さよならは今だ | 再见是现在
 [00:05.00] あなたの記憶は
 ```
 
-歌词样式自动取自 PSD 中名称包含「歌词」的文字层（含「翻译」的为翻译层）。
+Lyric styling is read from the PSD text layer whose name contains "歌词" (lyrics); a layer whose name also contains "翻译" (translation) is used for the translated line.
 
-### 自动识别歌词
+### Automatic lyric recognition
 
-- **本地（推荐）**：`AUTO_LYRICS_ENGINE='whisper'`，使用 `Models/faster-whisper-small` 离线识别，句级时间戳精确（首次使用前请先运行 `python download_model.py` 下载模型）。
-- **在线**：`AUTO_LYRICS_ENGINE='baidu'`，需在 GUI「设置翻译 Key」中配置百度语音识别与翻译凭证（保存于 `baidu_keys.json`）。
+- **Local (recommended)**: `AUTO_LYRICS_ENGINE='whisper'` uses `Models/faster-whisper-small` for offline recognition with accurate sentence-level timestamps.
+- **Online**: `AUTO_LYRICS_ENGINE='baidu'` requires Baidu speech-recognition and translation credentials, configured through "设置翻译 Key" (Set translation key) in the GUI and stored in `baidu_keys.json`.
 
-## 常见问题
+## Troubleshooting
 
-- **中文路径写入失败**：脚本会自动先写临时英文文件名再改名，规避 OpenCV 在 Windows 下的中文路径问题。
-- **背景音乐未合成**：请确认已安装 `imageio-ffmpeg`（提供 ffmpeg 可执行文件）。
-- **歌词不可见**：请确认 PSD 中存在名称含「歌词」的可见文字层，且歌词文件时间戳格式正确。
-- **自动识别无结果**：`whisper` 需本地模型存在或可下载；`baidu` 需凭证完整。
+- **Writing to Chinese paths fails**: The script writes to a temporary ASCII filename first and renames it afterwards, working around OpenCV's problems with non-ASCII paths on Windows.
+- **Background music is not muxed**: Make sure `imageio-ffmpeg` is installed (it provides the ffmpeg executable).
+- **Lyrics are invisible**: Make sure the PSD contains a visible text layer whose name contains "歌词", and that the lyric file uses valid timestamps.
+- **No recognition results**: `whisper` needs the local model to be present or downloadable; `baidu` needs complete credentials.
