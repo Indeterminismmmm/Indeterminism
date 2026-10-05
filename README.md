@@ -39,10 +39,10 @@ g:\script
 Requires Python 3.8+ and the following packages:
 
 ```bash
-pip install opencv-python numpy Pillow psd-tools requests faster-whisper imageio-ffmpeg
+pip install opencv-python numpy Pillow psd-tools requests faster-whisper imageio-ffmpeg huggingface-hub
 ```
 
-> `tkinter` ships with Python. `imageio-ffmpeg` provides the ffmpeg executable used for muxing background music, and `faster-whisper` powers local speech recognition (Baidu online recognition can be used instead).
+> `tkinter` ships with Python. `imageio-ffmpeg` provides the ffmpeg executable used for muxing background music, `faster-whisper` powers local speech recognition (Baidu online recognition can be used instead), and `huggingface-hub` is used by `download_model.py` to fetch the local Whisper model weights.
 
 ## Quick Start
 
