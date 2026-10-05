@@ -1,0 +1,22 @@
+# ---- Python 缓存 ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---- 密钥文件（含真实凭证，切勿提交）----
+baidu_keys.json
+
+# ---- 渲染 / 识别产生的临时文件 ----
+_output_tmp.mp4
+_lyrics_tmp.pcm
+_lyrics_tmp.wav
+
+# ---- 本地 Whisper 模型权重（体积大，建议自行下载，不要提交）----
+Models/faster-whisper-small/model.bin
+
+# ---- 示例素材（体积大，不入库）----
+mp4/*.psd
+mp4/*.mp3
+
+# ---- 渲染输出的视频 / 视频素材 ----
+*.mp4
