@@ -104,7 +104,7 @@ Lyric styling is read from the PSD text layer whose name contains "歌词" (lyri
 ### Automatic lyric recognition
 
 - **Local (recommended)**: `AUTO_LYRICS_ENGINE='whisper'` uses `Models/faster-whisper-small` for offline recognition with accurate sentence-level timestamps.
-- **Online**: `AUTO_LYRICS_ENGINE='baidu'` requires Baidu speech-recognition and translation credentials, configured through "设置语音识别 Key" (Set recognition key) in the GUI and stored in `baidu_keys.json`.
+- **Online**: `AUTO_LYRICS_ENGINE='baidu'` requires Baidu speech-recognition and translation credentials, configured through "设置语音识别/翻译 Key" (Set recognition / translation keys) in the GUI and stored in `baidu_keys.json`.
 
 ## Troubleshooting
 
