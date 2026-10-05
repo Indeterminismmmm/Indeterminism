@@ -30,8 +30,8 @@ g:\script
     ├── renderer.py                # 核心渲染与歌词识别逻辑
     ├── gui.py                     # 图形界面
     ├── main.pyw                   # 双击无终端启动 GUI（pythonw）
-    ├── baidu_keys.json            # 百度识别/翻译 Key（由 GUI 保存）
-    └── ...                        # 示例 PSD / mp3 / lrc 文件
+    ├── baidu_keys.json            # 百度识别/翻译 Key（由 GUI 保存，不入库）
+    └── ...                        # 示例 PSD / mp3 / lrc 文件（大素材不入库）
 ```
 
 ## 环境依赖
