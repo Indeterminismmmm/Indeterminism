@@ -188,7 +188,7 @@ class App:
             values=['auto', 'ja', 'ru', 'en', 'zh', 'ko', 'fr', 'de', 'es'])
         self.lang_box.pack(side="left")
         ttk.Button(r, text="语音识别歌词", command=self._auto_lyrics).pack(side="left", padx=8)
-        ttk.Button(r, text="设置翻译 Key", command=self._open_key_dialog).pack(side="left", padx=4)
+        ttk.Button(r, text="设置语音识别 Key", command=self._open_key_dialog).pack(side="left", padx=4)
 
         # ⑤ 开始渲染
         self.start_btn = ttk.Button(left, text="开始渲染", command=self._start)
