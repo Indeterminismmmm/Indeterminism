@@ -413,7 +413,7 @@ class App:
 
     def _open_key_dialog(self):
         dlg = tk.Toplevel(self.root)
-        dlg.title("设置百度识别/翻译 Key")
+        dlg.title("设置语音识别/翻译 Key")
         dlg.configure(bg=BG_COLOR_UI)
         dlg.resizable(False, False)
         dlg.transient(self.root)
@@ -441,7 +441,7 @@ class App:
                 self.baidu_keys[key] = e.get().strip()
             if self._save_baidu_keys():
                 dlg.destroy()
-                messagebox.showinfo("已保存", "百度 Key 已保存。")
+                messagebox.showinfo("已保存", "语音识别 Key 已保存。")
 
         btns = ttk.Frame(dlg)
         btns.grid(row=len(fields), column=0, columnspan=2, pady=12)
@@ -455,7 +455,7 @@ class App:
             return
         keys = self.baidu_keys
         if not (keys.get('app_id') and keys.get('trans_key')):
-            messagebox.showwarning("提示", "自动翻译需要百度翻译 Key（APP ID + 密钥）。")
+            messagebox.showwarning("提示", "自动翻译需要文字翻译 Key（APP ID + 密钥）。")
             self._open_key_dialog()
             return
         lang = self.lang_var.get().strip() or 'auto'
@@ -547,7 +547,7 @@ class App:
                 if kind == "log":
                     msg, cur, tot = args
                     if cur is not None and tot:
-                        # 进度更新：只更新浮动标签 + 进度条，不写日志（避免刷屏）
+                        # 进度更新：浮动标签 + 进度条
                         self.status_label.config(text=msg)
                         if self.progress.cget("mode") != "determinate":
                             self.progress.stop()
